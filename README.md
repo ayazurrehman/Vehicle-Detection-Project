@@ -19,10 +19,15 @@ The goals / steps of this project are the following:
 [image2]: ./examples/hog.jpg
 [image2a]: ./examples/original.png
 [image3]: ./examples/test1.jpg
-[image3a]: ./examples/rectangle.jpg
+[image3a]: ./examples/rectangles.jpg
 [image4]: ./examples/heatmap.jpg
 [image5]: ./examples/output.jpg
-[image6]: ./examples/labels_map.png
+[image6]: ./examples/slidingwindow1.png
+[image6a]: ./examples/slidingwindow2.png
+[image6b]: ./examples/slidingwindow3.png
+[image6c]: ./examples/slidingwindow4.png
+[image6d]: ./examples/slidingwindow5.png
+[image6e]: ./examples/slidingwindow6.png
 [image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
@@ -40,12 +45,10 @@ You're reading it!
 
 ####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the second code cell of the IPython notebook in the form of a function
+The code for this step is contained in the second code cell of the IPython notebook `Vehicle Detection Project.ipynb` in the form of a function
 `get_hog_features`.  
 
-The function has been called within another function `extract_features` in fifth code cell of the notebook. This function has been used under
-the section `training the model...` where it is fed with the image data with and without cars to train the model.
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes respectively:
+`get_hog_features` function has been called within another function `extract_features` in fifth code cell of the notebook which is used for training the model used for this project(explained below). Here is an example of one of each of the `vehicle` and `non-vehicle` classes respectively:
 
 ![image1]
 ![image1a]
@@ -69,7 +72,7 @@ The other parameters are same as what was used during the course work and it see
 ####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 
-I trained a linear SVM by extracting color histogram feature and HOG feature and combining them together. The code for extracting the features them and structuring them in the form that is used by the training model is in the fifth code cell of the ipython notebook as part of the function `extract_features`. This method is later used in the section `training the model...` in order to extract features for all the data set that is available for training the model. The output of both these features are combined and normalized (code cell 9) using the `StandardScaler` function.
+I trained a linear SVM by extracting color histogram feature and HOG feature and combining them together. The code for extracting the features them and structuring them in the form that is used by the training model is in the fifth code cell of the ipython notebook `Vehicle Detection Project.ipynb` as part of the function `extract_features`. This method is later used to train the model in order to extract features for all the data set that is available for training the model. The output of both these features are combined and normalized (code cell 9) using the `StandardScaler` function.
 
 The data set from images with cars and without cars is read seperately so it is easier to assign the labels.
 
@@ -78,8 +81,8 @@ The normalized data is then split into training and validation set and fed to th
 
 `Using: 9 orientations 8 pixels per cell and 2 cells per block
 Feature vector length: 8460
-13.15 Seconds to train SVC...
-Test Accuracy of SVC =  0.9944`
+9.72 Seconds to train SVC...
+Test Accuracy of SVC =  0.9941`
 
 
 
@@ -87,13 +90,26 @@ Test Accuracy of SVC =  0.9944`
 
 ####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-The sliding window search has been implemented as part of the function `find_cars`(code cell 11) and is applied to every frame of the video to identify for cars.
+The sliding window search has been implemented as part of the function `find_cars`(code cell 10) and is applied to every frame of the video to identify for cars. Even before the sliding window search, the image fed to the model is first cropped so the relevant part of the data is being fed to the model. Hog sub sampling is done so as to optimize the pipeline.
 
-
-Even before the sliding window search, the image fed to the model is first cropped so the relevant part of the data is being fed to the model. Hog sub sampling is done so as to optimize the pipeline and the overlap is specified in terms of cells steps to be taken as suggested in the course work. The output of the method is shown below.
 
 ![image3]
 ![image3a]
+
+The following scale values were used  - `1, 1.5. 2` to test the predictions of the model. However, 1.5 scale seemed to give a reasonable balance of true positives and false positives so `1.5` was used.
+
+The overlap is specified in terms of `cells_per_step` to be taken (code cell 10) as suggested in the course work. The following values were tried for `cells_per_step` - `1,2`.
+However, `2` was chosen because, `1` increased the prediction time and also the false positives value.
+
+Please find sliding window applied to all the test images - 
+
+![image6]
+![image6a]
+![image6b]
+![image6c]
+![image6d]
+![image6e]
+
 
 ####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
