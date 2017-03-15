@@ -96,7 +96,7 @@ The sliding window search has been implemented as part of the function `find_car
 ![image3]
 ![image3a]
 
-The following scale values were used  - `1, 1.5. 2` to test the predictions of the model. However, 1.5 scale seemed to give a reasonable balance of true positives and false positives so `1.5` was used.
+The following scale values were used  - `1, 1.5. 2` to test the predictions of the model. However, the values `1.3, 1.5` as scale value seemed to give a reasonable balance of true positives and false positives.
 
 The overlap is specified in terms of `cells_per_step` to be taken (code cell 10) as suggested in the course work. The following values were tried for `cells_per_step` - `1,2`.
 However, `2` was chosen because, `1` increased the prediction time and also the false positives value.
@@ -128,9 +128,11 @@ Here's a [link to my video result](./project_video.mp4)
 
 ####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
+I recorded the positions of positive detections in each frame of the video and stored it in the variable `boxes`. `boxes` is used as a global variable and stores positive detections from previous 105 frames. When the frames are fed to the pipeline for processing, `boxes` is initialized with dummy values `((0, 0), (0, 0))` so that the size of the list is equal to the number of previous video frames that is to be considered while identifying vehicles in a frame. From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 
-The above images represent the same.
+As per suggestion from the last review, I have increased the number of previous video frames that account for the prediction of vehicles in any video frame and increased the threshold.
+
+I have also increased the number of scales used so as to have different window sizes.
 
 
 
